@@ -20,6 +20,7 @@
 
         h1 {
             margin: 0 auto;
+            margin-left: 30px
         }
 
         .x .tick line {
@@ -63,14 +64,69 @@
             max-width: 1000px;
             margin: 0 auto;
         }
+
+        .block {
+            margin-right: 3px;
+            margin-top: -2px;
+            width: 12px;
+            height: 12px;
+        }
+
+        .legend {
+            margin-left: 15px;
+            margin-top: -13px;
+            font-size: 13px;
+            font-weight: 200;
+            line-height: 1.2;
+        }
+
+        .legend-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            margin: 3px 0 5px 30px;
+        }
+
+        .elements {
+            margin: 3px 8px 3px 0;
+            flex-direction: row;
+            align-items: center;
+        }
+
     </style>
 </head>
 
 <body>
     <div class="chart-container">
-        <h1 class="headline">
-            Healthcare by income in 2009
-        </h1>
+        <div class = "head-container">
+            <h1 class="headline">
+                Healthcare by income in 2009
+            </h1>
+            <div class="legend-container">
+                <div class="elements medicaremedicaid">
+                    <div class="block" style="background-color: rgb(253, 216, 53);"></div>
+                    <div class="legend">Medicare and Medicaid</div>
+                </div>
+                <div class="elements direct-purchase">
+                    <div class="block" style="background-color: rgb(77, 208, 225);"></div>
+                    <div class="legend">Direct Purchase</div>
+                </div>
+                <div class="elements subsidized-exchange">
+                    <div class="block" style="background-color: rgb(240, 98, 146);"></div>
+                    <div class="legend">Subsidized Exchange</div>
+                </div>
+                <div class="elements chip">
+                    <div class="block" style="background-color: rgb(92, 107, 192);"></div>
+                    <div class="legend">CHIP</div></div>
+                <div class="elements military">
+                    <div class="block" style="background-color: rgb(144, 164, 174);"></div>
+                    <div class="legend">Military</div></div>
+                <div class="elements other">
+                    <div class="block" style="background-color: rgb(224, 224, 224);"></div>
+                    <div class="legend">Other</div>
+                </div>
+            </div>
+        </div>
 
         <svg width="1050px" height="575px">
         </svg>
@@ -175,6 +231,7 @@
             .attr("class", "y axis")
             .call(yAxisSettings)
             .call(g => g.selectAll(".domain").remove())
+            .attr("transform", `translate(${margin.left},0)`)
 
     // areas
         let areas = svg.append("g")
@@ -245,6 +302,14 @@
             .attr("y", 130)
             .text("Uninsured")
             .style("fill", "white")
+
+        let key_direct = areas
+            .append("text")
+            .attr("class", "label")
+            .attr("x", 725)
+            .attr("y", 50)
+            .text("Direct Purchase")
+            .style("font-size", "12px")
         
         function update() {
             console.log("update")
@@ -284,6 +349,13 @@
                     .duration(500)
                     .attr("x", 80)
                     .attr("y", 130)
+                
+                key_direct
+                    .transition()
+                    .ease(d3.easeSin)
+                    .duration(500)
+                    .attr("x", 725)
+                    .attr("y", 50)
 
             }
             
@@ -331,6 +403,12 @@
                 .attr("x", 145)
                 .attr("y", 100)
             
+            key_direct
+                .transition()
+                .ease(d3.easeSin)
+                .duration(500)
+                .attr("x", 725)
+                .attr("y", 42)
             
         
         }
